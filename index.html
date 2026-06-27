@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>九州11天 劉宇軒 & 謝詠恩</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@700&display=swap');
+
+  :root {
+    --bg: #f7f5f0;
+    --card: #ffffff;
+    --border: #e8e4dc;
+    --text: #1a1a18;
+    --muted: #7a7870;
+    --accent: #2d6a4f;
+    --accent-light: #e8f4ef;
+    --accent-mid: #52b788;
+    --warn: #b5451b;
+    --warn-light: #fdf0eb;
+    --tag-fuk: #1a5276; --tag-fuk-bg: #eaf2fb;
+    --tag-kum: #922b21; --tag-kum-bg: #fdedec;
+    --tag-aso: #1e6c3e; --tag-aso-bg: #e9f7ef;
+    --tag-bep: #4a235a; --tag-bep-bg: #f5eef8;
+    --tag-ret: #5d5d5d; --tag-ret-bg: #f4f4f4;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    font-family: 'Noto Sans TC', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #1a3a2a 0%, #2d6a4f 60%, #52b788 100%);
+    color: white;
+    padding: 48px 24px 36px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '⛰️🌋🏯♨️';
+    position: absolute;
+    font-size: 120px;
+    opacity: 0.06;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    letter-spacing: 20px;
+  }
+  .hero-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    opacity: 0.7;
+    margin-bottom: 10px;
+  }
+  .hero-title {
+    font-family: 'Noto Serif TC', serif;
+    font-size: clamp(26px, 6vw, 42px);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .hero-names {
+    font-size: 14px;
+    opacity: 0.85;
+    margin-bottom: 20px;
+  }
+  .hero-pills {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .hero-pill {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 12px;
+  }
+
+  /* NOTICE BAR */
+  .notice-bar {
+    background: var(--warn-light);
+    border-bottom: 2px solid #e8c4b4;
+    padding: 10px 20px;
+    font-size: 13px;
+    color: var(--warn);
+    text-align: center;
+  }
+  .notice-bar strong { font-weight: 700; }
+
+  /* LAYOUT */
+  .container { max-width: 800px; margin: 0 auto; padding: 24px 16px 60px; }
+
+  /* SECTION HEADER */
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    margin-top: 32px;
+  }
+  .section-title {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .edit-all-btn {
+    font-size: 12px;
+    padding: 5px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--accent);
+    background: white;
+    color: var(--accent);
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+  }
+  .edit-all-btn:hover { background: var(--accent-light); }
+
+  /* SUMMARY CARDS */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .summary-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px;
+    text-align: center;
+  }
+  .summary-card .val {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .summary-card .lbl { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  /* DAY CARDS */
+  .day-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+  .day-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
+
+  .day-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .day-num {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .day-meta { flex: 1; min-width: 0; }
+  .day-date { font-size: 12px; color: var(--muted); }
+  .day-title-wrap { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .day-name { font-weight: 700; font-size: 15px; }
+  .region-tag {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+  .day-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .day-actions { display: flex; gap: 6px; align-items: center; }
+  .btn-edit, .btn-chev {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--muted);
+    font-size: 16px;
+    padding: 4px;
+    border-radius: 6px;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+  .btn-edit:hover { background: var(--accent-light); color: var(--accent); }
+  .btn-chev { transition: transform 0.2s; }
+  .btn-chev.open { transform: rotate(180deg); }
+
+  /* DAY BODY */
+  .day-body { display: none; border-top: 1px solid var(--border); }
+  .day-body.open { display: block; }
+
+  /* TIMELINE */
+  .timeline { padding: 16px 16px 8px 16px; }
+  .tl-item {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 0 12px;
+    margin-bottom: 12px;
+    position: relative;
+  }
+  .tl-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 77px;
+    top: 22px;
+    bottom: -4px;
+    width: 1px;
+    background: var(--border);
+  }
+  .tl-time {
+    font-size: 11px;
+    color: var(--muted);
+    padding-top: 3px;
+    text-align: right;
+  }
+  .tl-right { display: flex; flex-direction: column; gap: 2px; }
+  .tl-dot-wrap { display: flex; align-items: flex-start; gap: 8px; }
+  .tl-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 5px;
+  }
+  .tl-name { font-size: 13px; font-weight: 600; flex: 1; }
+  .tl-desc { font-size: 12px; color: var(--muted); line-height: 1.6; padding-left: 16px; }
+
+  /* ALERTS */
+  .alerts { padding: 0 16px 14px; display: flex; flex-direction: column; gap: 6px; }
+  .alert {
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    line-height: 1.5;
+    display: flex;
+    gap: 6px;
+  }
+  .alert-warn { background: var(--warn-light); color: var(--warn); border: 1px solid #f0c4b4; }
+  .alert-info { background: var(--accent-light); color: #1a5c3a; border: 1px solid #b8dece; }
+  .alert-success { background: #eafaf1; color: #1e6c3e; border: 1px solid #abebc6; }
+
+  /* NOTES SECTION */
+  .notes-area {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px;
+    margin-top: 8px;
+  }
+  .notes-area textarea {
+    width: 100%;
+    min-height: 100px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px;
+    font-family: inherit;
+    font-size: 13px;
+    color: var(--text);
+    background: var(--bg);
+    resize: vertical;
+    outline: none;
+  }
+  .notes-area textarea:focus { border-color: var(--accent-mid); }
+  .notes-save-btn {
+    margin-top: 8px;
+    padding: 7px 18px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .notes-save-btn:hover { background: #235c41; }
+
+  /* EDIT MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--card);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 560px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 24px;
+  }
+  .modal-title {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--accent);
+  }
+  .field-group { margin-bottom: 14px; }
+  .field-label { font-size: 12px; color: var(--muted); margin-bottom: 4px; display: block; }
+  .field-input {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 9px 12px;
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--text);
+    background: var(--bg);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .field-input:focus { border-color: var(--accent-mid); }
+  .spots-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px; }
+  .spot-row {
+    display: grid;
+    grid-template-columns: 60px 1fr 1fr auto;
+    gap: 6px;
+    align-items: center;
+  }
+  .spot-row input {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 7px 8px;
+    font-family: inherit;
+    font-size: 12px;
+    background: var(--bg);
+    color: var(--text);
+    width: 100%;
+    outline: none;
+  }
+  .spot-row input:focus { border-color: var(--accent-mid); }
+  .btn-del-spot {
+    background: none;
+    border: none;
+    color: #c0392b;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 4px;
+    border-radius: 4px;
+  }
+  .btn-del-spot:hover { background: #fdecea; }
+  .btn-add-spot {
+    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px dashed var(--accent-mid);
+    background: var(--accent-light);
+    color: var(--accent);
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .modal-footer {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    margin-top: 20px;
+  }
+  .btn-cancel {
+    padding: 9px 18px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: white;
+    color: var(--muted);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 13px;
+  }
+  .btn-save {
+    padding: 9px 20px;
+    border-radius: 8px;
+    border: none;
+    background: var(--accent);
+    color: white;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .btn-save:hover { background: #235c41; }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--text);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 13px;
+    transition: transform 0.3s;
+    z-index: 2000;
+    white-space: nowrap;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* CHECKLIST */
+  .checklist { display: flex; flex-direction: column; gap: 6px; }
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 12px;
+    background: var(--bg);
+    border-radius: 8px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+  }
+  .check-item:hover { background: var(--accent-light); }
+  .check-item input[type=checkbox] { margin-top: 2px; accent-color: var(--accent); width: 15px; height: 15px; flex-shrink: 0; }
+  .check-item.done .check-label { text-decoration: line-through; color: var(--muted); }
+  .check-label { font-size: 13px; line-height: 1.5; }
+  .check-urgency { font-size: 10px; padding: 1px 6px; border-radius: 10px; margin-left: auto; white-space: nowrap; flex-shrink: 0; }
+  .urg-now { background: #fdecea; color: #c0392b; }
+  .urg-soon { background: #fef9e7; color: #9a7d0a; }
+  .urg-later { background: var(--accent-light); color: var(--accent); }
+
+  @media (max-width: 500px) {
+    .spot-row { grid-template-columns: 50px 1fr auto; }
+    .spot-row input:nth-child(3) { display: none; }
+    .hero { padding: 36px 16px 28px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-label">2026 · 九州自駕之旅</div>
+  <div class="hero-title">九州 11 天行程</div>
+  <div class="hero-names">劉宇軒 & 謝詠恩 ✈ 7/7 – 7/17</div>
+  <div class="hero-pills">
+    <span class="hero-pill">🏯 熊本城</span>
+    <span class="hero-pill">🌋 阿蘇火山</span>
+    <span class="hero-pill">🚣 高千穗峽</span>
+    <span class="hero-pill">♨️ 別府</span>
+    <span class="hero-pill">🦁 九州自然動物園</span>
+  </div>
+</div>
+
+<div class="notice-bar">
+  ⚠️ <strong>高千穗峽划船（7/9）— 現在馬上預約！</strong> 預約開放日：6/25早上8:00（台灣時間）
+</div>
+
+<div class="container">
+
+  <!-- SUMMARY -->
+  <div class="summary-grid">
+    <div class="summary-card"><div class="val">11</div><div class="lbl">天數</div></div>
+    <div class="summary-card"><div class="val">6</div><div class="lbl">自駕天數</div></div>
+    <div class="summary-card"><div class="val">5</div><div class="lbl">地區</div></div>
+    <div class="summary-card"><div class="val">IT720</div><div class="lbl">去程航班</div></div>
+  </div>
+
+  <!-- CHECKLIST -->
+  <div class="section-header">
+    <div class="section-title">📋 預約清單</div>
+  </div>
+  <div class="notes-area">
+    <div class="checklist" id="checklist"></div>
+  </div>
+
+  <!-- ITINERARY -->
+  <div class="section-header" style="margin-top:28px">
+    <div class="section-title">🗓 每日行程</div>
+    <button class="edit-all-btn" onclick="openEditModal(editingDay)">✏️ 編輯</button>
+  </div>
+  <div id="days-container"></div>
+
+  <!-- NOTES -->
+  <div class="section-header">
+    <div class="section-title">📝 共享備忘錄</div>
+  </div>
+  <div class="notes-area">
+    <textarea id="shared-notes" placeholder="可以在這裡記下住宿連結、討論的事情、女友的想法... 兩個人都看得到！"></textarea>
+    <button class="notes-save-btn" onclick="saveNotes()">儲存備忘錄</button>
+  </div>
+
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <div class="modal-title">✏️ 編輯行程</div>
+    <div class="field-group">
+      <label class="field-label">日期</label>
+      <input class="field-input" id="edit-date" type="text">
+    </div>
+    <div class="field-group">
+      <label class="field-label">標題</label>
+      <input class="field-input" id="edit-title" type="text">
+    </div>
+    <div class="field-group">
+      <label class="field-label">副標題（一行說明）</label>
+      <input class="field-input" id="edit-sub" type="text">
+    </div>
+    <div class="field-group">
+      <label class="field-label">景點 / 行程項目（時間 · 名稱 · 說明）</label>
+      <div class="spots-list" id="edit-spots"></div>
+      <button class="btn-add-spot" onclick="addSpotRow()">＋ 新增項目</button>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal()">取消</button>
+      <button class="btn-save" onclick="saveDay()">儲存</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const STORAGE_KEY = 'kyushu2026_v2';
+const NOTES_KEY = 'kyushu2026_notes';
+const CHECK_KEY = 'kyushu2026_checks';
+
+const COLORS = {
+  fuk: { bg:'#eaf2fb', text:'#1a5276', dot:'#2471a3', tag:'福岡', tagBg:'#d6eaf8', tagColor:'#1a5276' },
+  kum: { bg:'#fdedec', text:'#922b21', dot:'#c0392b', tag:'熊本', tagBg:'#fadbd8', tagColor:'#922b21' },
+  aso: { bg:'#e9f7ef', text:'#1e6c3e', dot:'#1e8449', tag:'阿蘇', tagBg:'#d5f5e3', tagColor:'#1e6c3e' },
+  bep: { bg:'#f5eef8', text:'#4a235a', dot:'#7d3c98', tag:'別府', tagBg:'#e8daef', tagColor:'#4a235a' },
+  ret: { bg:'#f4f4f4', text:'#5d5d5d', dot:'#909090', tag:'返台', tagBg:'#ebebeb', tagColor:'#5d5d5d' },
+};
+
+const DEFAULT_DAYS = [
+  { c:'fuk', date:'7/7 (二)', title:'抵達福岡', sub:'16:55落地 · 博多晚上逛街',
+    items:[
+      { time:'16:55', name:'抵達福岡機場 FUK', desc:'辦入境、領行李、換日幣' },
+      { time:'17:45', name:'地鐵至博多站', desc:'國際線約10分鐘 ¥260' },
+      { time:'18:30', name:'Check in 旅館', desc:'博多站或天神附近' },
+      { time:'19:30', name:'中洲川端屋台', desc:'博多屋台文化，拉麵/串燒/煮物' },
+    ],
+    alerts:[{type:'info',text:'今天輕鬆入住就好，明天一早取車出發'}]
+  },
+  { c:'kum', date:'7/8 (三)', title:'福岡 → 熊本', sub:'博多站取車 · 全程約1.5小時',
+    items:[
+      { time:'08:30', name:'博多站取車', desc:'帶：台灣駕照、國際駕照、護照。記得租ETC卡！' },
+      { time:'09:00', name:'出發熊本', desc:'九州自動車道，約100km 1.5小時' },
+      { time:'11:00', name:'熊本城', desc:'天守閣已開放，門票¥800，預留2小時' },
+      { time:'13:30', name:'城彩苑午餐', desc:'馬肉刺身、太平燕必吃' },
+      { time:'14:30', name:'水前寺成趣園', desc:'大名庭園，門票¥400，約1小時' },
+      { time:'16:00', name:'下通商店街', desc:'熊本熊周邊、藥妝、柚子胡椒' },
+      { time:'18:00', name:'晚餐＋住熊本', desc:'馬肉壽司或熊本拉麵' },
+    ],
+    alerts:[
+      {type:'warn',text:'⚠️ 熊本縣無法用Suica！備現金或信用卡'},
+      {type:'info',text:'市區停車後搭路面電車最方便'}
+    ]
+  },
+  { c:'aso', date:'7/9 (四)', title:'熊本 → 高千穗 → 阿蘇', sub:'高千穗峽划船 · 流水麵線 · 上色見神社',
+    items:[
+      { time:'07:00', name:'早出發→高千穗', desc:'約2小時，早到才搶得到停車位' },
+      { time:'09:00', name:'高千穗峽划船', desc:'真名井瀑布下划船，30分鐘 ¥4,100（週四）' },
+      { time:'10:30', name:'千穗の家流水麵線', desc:'峽谷旁始祖老店，夏天涼麵必吃！' },
+      { time:'11:30', name:'高千穗峽步道', desc:'三橋觀景，俯瞰峽谷全景' },
+      { time:'13:00', name:'上色見熊野座神社', desc:'108座石燈籠穿越杉木林，距高千穗15分鐘' },
+      { time:'14:30', name:'出發阿蘇', desc:'高千穗→阿蘇約1小時' },
+      { time:'17:00', name:'大觀峰（可選）', desc:'夕陽前看阿蘇外輪山全景' },
+    ],
+    alerts:[
+      {type:'warn',text:'⚠️ 高千穗划船已可預約！（7/9去，6/25早上8:00台灣時間開放）快去官網訂！'},
+    ]
+  },
+  { c:'aso', date:'7/10 (五)', title:'阿蘇', sub:'火山口 · 草千里 · 大觀峰',
+    items:[
+      { time:'08:00', name:'阿蘇中岳火山口', desc:'通行費¥800，硫磺氣味強烈，視天氣開放' },
+      { time:'09:30', name:'草千里ヶ浜', desc:'遼闊火山高原，馬兒吃草，超夢幻' },
+      { time:'11:00', name:'阿蘇火山博物館（可選）', desc:'可看火山口即時直播' },
+      { time:'12:30', name:'午餐', desc:'赤牛丼，阿蘇名物必吃' },
+      { time:'14:00', name:'大觀峰展望台', desc:'360度俯瞰阿蘇五岳，步道30分鐘' },
+      { time:'16:00', name:'阿蘇神社', desc:'下山後參拜' },
+      { time:'18:00', name:'內牧溫泉泡湯＋晚餐', desc:'住阿蘇市區' },
+    ],
+    alerts:[{type:'warn',text:'⚠️ 出發前查 aso.gr.jp 確認火山口當日是否開放！'}]
+  },
+  { c:'bep', date:'7/11 (六)', title:'阿蘇 → 九州自然動物園 → 由布院', sub:'非洲Safari · 金鱗湖',
+    items:[
+      { time:'08:30', name:'出發九州自然動物園', desc:'阿蘇→宇佐市約1.5小時' },
+      { time:'09:30', name:'九州自然動物園（アフリカンサファリ）', desc:'叢林巴士或自駕穿越，獅子長頸鹿近距離！約2-3小時' },
+      { time:'13:00', name:'出發由布院', desc:'動物園→由布院約40分鐘' },
+      { time:'14:00', name:'由布院金鱗湖', desc:'湖面水氣蒸騰，四周咖啡廳與小店' },
+      { time:'15:30', name:'湯之坪街道', desc:'特色雜貨、甜點、工藝品' },
+      { time:'17:30', name:'Check in 由布院溫泉旅館', desc:'懷石料理晚餐＋露天風呂' },
+    ],
+    alerts:[
+      {type:'warn',text:'⚠️ 叢林巴士建議提前預約，旺季容易滿'},
+      {type:'info',text:'由布院旅館含晚餐套餐要提前訂好'}
+    ]
+  },
+  { c:'bep', date:'7/12 (日)', title:'由布院 → 別府', sub:'地獄溫泉 · 纜車 · 別府塔',
+    items:[
+      { time:'09:00', name:'由布院早晨散步', desc:'清晨金鱗湖水霧最美，早起人少景美' },
+      { time:'10:00', name:'退房→別府', desc:'約30分鐘' },
+      { time:'10:30', name:'別府地獄溫泉巡遊', desc:'8個地獄套票¥2,200，約3小時走完' },
+      { time:'14:00', name:'近鐵別府空中纜車', desc:'上鶴見岳俯瞰別府灣，約1.5小時' },
+      { time:'16:00', name:'別府塔', desc:'昭和地標，登頂¥200' },
+      { time:'17:30', name:'竹瓦温泉', desc:'¥100老澡堂，超便宜體驗正宗別府溫泉' },
+      { time:'19:00', name:'別府晚餐', desc:'別府冷麵、關鯖魚料理，住別府市區' },
+    ],
+    alerts:[{type:'info',text:'地獄巡遊上午去人比較少，套票比單買便宜很多'}]
+  },
+  { c:'ret', date:'7/13 (一)', title:'別府 → 還車 → 福岡', sub:'還車博多站 · 改搭大眾交通',
+    items:[
+      { time:'09:00', name:'別府最後足湯', desc:'逛竹細工商店、吃早餐' },
+      { time:'10:30', name:'出發福岡', desc:'別府→博多站約2小時，大分自動車道' },
+      { time:'13:00', name:'還車博多站', desc:'還車前加滿油！記得拍車況照片' },
+      { time:'14:00', name:'博多午餐', desc:'博多美食好好吃一頓' },
+      { time:'15:30', name:'博多運河城', desc:'逛街休息' },
+      { time:'18:00', name:'中洲屋台晚餐', desc:'博多必體驗的屋台文化' },
+    ],
+    alerts:[{type:'success',text:'✅ 從今天起改搭地鐵，福岡地鐵日票¥660'}]
+  },
+  { c:'fuk', date:'7/14 (二)', title:'福岡 · 太宰府', sub:'太宰府天滿宮 · 天神逛街',
+    items:[
+      { time:'10:00', name:'太宰府天滿宮', desc:'地鐵+西鐵約40分鐘，學問之神，梅ヶ枝餅必吃' },
+      { time:'12:00', name:'太宰府午餐', desc:'參道美食、梅ヶ枝餅' },
+      { time:'14:00', name:'九州國立博物館', desc:'就在太宰府旁，四大國博之一' },
+      { time:'16:30', name:'回天神', desc:'西鐵電車' },
+      { time:'17:30', name:'天神地下街', desc:'全日本最長地下商店街之一，冷氣超涼' },
+      { time:'19:30', name:'天神晚餐', desc:'博多拉麵或敘敘苑燒肉' },
+    ],
+    alerts:[]
+  },
+  { c:'fuk', date:'7/15 (三)', title:'福岡 · 糸島 or 門司港', sub:'自選：海岸 or 復古港口',
+    items:[
+      { time:'09:30', name:'選A：糸島海岸', desc:'JR筑肥線40分鐘，二見浦夫婦岩、芥屋海岸' },
+      { time:'09:30', name:'選B：門司港復古區', desc:'JR約1小時，明治洋館、可走路到下關！' },
+      { time:'15:00', name:'大濠公園', desc:'福岡最美公園，湖景悠閒' },
+      { time:'17:00', name:'博多站掃貨', desc:'AMU PLAZA、博多阪急，最後採購伴手禮' },
+      { time:'19:30', name:'水炊き晚餐', desc:'博多名物雞肉鍋，提前訂位' },
+    ],
+    alerts:[{type:'info',text:'糸島適合夏天海邊感，門司港適合歷史建築控，二選一'}]
+  },
+  { c:'fuk', date:'7/16 (四)', title:'福岡最後一天', sub:'購物採買 · 最後晚餐',
+    items:[
+      { time:'10:00', name:'藥妝掃貨', desc:'松本清、唐吉訶德，把行李箱塞滿' },
+      { time:'12:00', name:'博多拉麵午餐', desc:'一蘭或一幸舍，最後一次豚骨拉麵' },
+      { time:'14:00', name:'中洲川端商店街', desc:'明太子、博多通りもん等伴手禮必買' },
+      { time:'18:30', name:'最後晚餐', desc:'隨心所欲，好好吃！' },
+      { time:'21:00', name:'打包行李', desc:'確認護照、機票截圖、入境卡' },
+    ],
+    alerts:[{type:'warn',text:'⚠️ 明天IT241 10:55起飛，建議早上8:00出門搭地鐵'}]
+  },
+  { c:'ret', date:'7/17 (五)', title:'返回台灣', sub:'IT241 FUK → TPE 10:55',
+    items:[
+      { time:'07:30', name:'退房', desc:'確認行李、護照、手機充飽電' },
+      { time:'08:00', name:'地鐵去福岡機場', desc:'博多站→國際線約10分鐘 ¥260' },
+      { time:'08:30', name:'報到 Check-in', desc:'IT241，建議9:00前到機場' },
+      { time:'10:55', name:'IT241 起飛', desc:'FUK → TPE' },
+      { time:'12:25', name:'抵達桃園機場', desc:'平安回台灣！🎉' },
+    ],
+    alerts:[{type:'success',text:'✅ 完美的九州11天之旅，結束！'}]
+  },
+];
+
+const DEFAULT_CHECKS = [
+  { id:'c1', done:false, text:'高千穗峽划船預約（7/9，6/25早上8:00開放）', urgency:'now' },
+  { id:'c2', done:false, text:'博多站附近租車預訂（7/8取車，7/13還車）', urgency:'now' },
+  { id:'c3', done:false, text:'九州自然動物園叢林巴士預約（7/11）', urgency:'soon' },
+  { id:'c4', done:false, text:'由布院溫泉旅館預訂含晚餐套餐（7/11住）', urgency:'soon' },
+  { id:'c5', done:false, text:'確認國際駕照（1949日內瓦公約版）', urgency:'soon' },
+  { id:'c6', done:false, text:'換日幣或確認提款額度', urgency:'later' },
+  { id:'c7', done:false, text:'確認阿蘇火山口開放狀態（出發前查）', urgency:'later' },
+  { id:'c8', done:false, text:'下載離線地圖（Google Maps）', urgency:'later' },
+];
+
+let days = [];
+let checks = [];
+let editingDay = 0;
+
+// STORAGE
+async function loadData() {
+  try {
+    const r = await window.storage.get(STORAGE_KEY);
+    if (r) days = JSON.parse(r.value);
+    else days = JSON.parse(JSON.stringify(DEFAULT_DAYS));
+  } catch { days = JSON.parse(JSON.stringify(DEFAULT_DAYS)); }
+
+  try {
+    const r2 = await window.storage.get(NOTES_KEY);
+    if (r2) document.getElementById('shared-notes').value = r2.value;
+  } catch {}
+
+  try {
+    const r3 = await window.storage.get(CHECK_KEY);
+    if (r3) checks = JSON.parse(r3.value);
+    else checks = JSON.parse(JSON.stringify(DEFAULT_CHECKS));
+  } catch { checks = JSON.parse(JSON.stringify(DEFAULT_CHECKS)); }
+
+  render();
+  renderChecks();
+}
+
+async function saveData() {
+  try { await window.storage.set(STORAGE_KEY, JSON.stringify(days), true); } catch {}
+}
+
+async function saveNotes() {
+  const val = document.getElementById('shared-notes').value;
+  try {
+    await window.storage.set(NOTES_KEY, val, true);
+    showToast('備忘錄已儲存 ✓');
+  } catch { showToast('儲存失敗'); }
+}
+
+async function saveChecks() {
+  try { await window.storage.set(CHECK_KEY, JSON.stringify(checks), true); } catch {}
+}
+
+// RENDER DAYS
+function render() {
+  const c = document.getElementById('days-container');
+  c.innerHTML = '';
+  days.forEach((d, i) => {
+    const col = COLORS[d.c] || COLORS.ret;
+    const el = document.createElement('div');
+    el.className = 'day-card';
+    el.innerHTML = `
+      <div class="day-header" onclick="toggleDay(${i})">
+        <div class="day-num" style="background:${col.bg};color:${col.text}">${i+1}</div>
+        <div class="day-meta">
+          <div class="day-date">${d.date}</div>
+          <div class="day-title-wrap">
+            <span class="day-name">${d.title}</span>
+            <span class="region-tag" style="background:${col.tagBg};color:${col.tagColor}">${col.tag}</span>
+          </div>
+          <div class="day-sub">${d.sub}</div>
+        </div>
+        <div class="day-actions">
+          <button class="btn-edit" onclick="event.stopPropagation();openEditModal(${i})" title="編輯">✏️</button>
+          <button class="btn-chev" id="chev-${i}">▼</button>
+        </div>
+      </div>
+      <div class="day-body" id="body-${i}">
+        <div class="timeline">
+          ${(d.items||[]).map(it => `
+            <div class="tl-item">
+              <div class="tl-time">${it.time||''}</div>
+              <div class="tl-right">
+                <div class="tl-dot-wrap">
+                  <div class="tl-dot" style="background:${col.dot}"></div>
+                  <div class="tl-name">${it.name||''}</div>
+                </div>
+                ${it.desc ? `<div class="tl-desc">${it.desc}</div>` : ''}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+        ${(d.alerts||[]).length ? `
+          <div class="alerts">
+            ${d.alerts.map(a => `
+              <div class="alert alert-${a.type}">
+                <span>${a.type==='warn'?'⚠️':a.type==='success'?'✅':'💡'}</span>
+                <span>${a.text}</span>
+              </div>
+            `).join('')}
+          </div>
+        ` : ''}
+      </div>
+    `;
+    c.appendChild(el);
+  });
+}
+
+function toggleDay(i) {
+  const body = document.getElementById('body-'+i);
+  const chev = document.getElementById('chev-'+i);
+  body.classList.toggle('open');
+  chev.classList.toggle('open');
+}
+
+// CHECKLIST
+function renderChecks() {
+  const c = document.getElementById('checklist');
+  c.innerHTML = '';
+  checks.forEach((ch, i) => {
+    const urgLabel = { now:'🔴 現在就要', soon:'🟡 出發前', later:'🟢 到時再說' }[ch.urgency] || '';
+    const urgClass = { now:'urg-now', soon:'urg-soon', later:'urg-later' }[ch.urgency] || 'urg-later';
+    const el = document.createElement('label');
+    el.className = 'check-item' + (ch.done ? ' done' : '');
+    el.innerHTML = `
+      <input type="checkbox" ${ch.done ? 'checked' : ''} onchange="toggleCheck(${i}, this.checked)">
+      <span class="check-label">${ch.text}</span>
+      <span class="check-urgency ${urgClass}">${urgLabel}</span>
+    `;
+    c.appendChild(el);
+  });
+}
+
+function toggleCheck(i, val) {
+  checks[i].done = val;
+  document.querySelectorAll('.check-item')[i].classList.toggle('done', val);
+  saveChecks();
+}
+
+// EDIT MODAL
+function openEditModal(i) {
+  editingDay = i;
+  const d = days[i];
+  document.getElementById('edit-date').value = d.date || '';
+  document.getElementById('edit-title').value = d.title || '';
+  document.getElementById('edit-sub').value = d.sub || '';
+  renderSpotRows(d.items || []);
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+
+function renderSpotRows(items) {
+  const c = document.getElementById('edit-spots');
+  c.innerHTML = '';
+  items.forEach((it, i) => {
+    const row = document.createElement('div');
+    row.className = 'spot-row';
+    row.innerHTML = `
+      <input placeholder="時間" value="${it.time||''}" oninput="updateSpot(${i},'time',this.value)">
+      <input placeholder="名稱" value="${it.name||''}" oninput="updateSpot(${i},'name',this.value)">
+      <input placeholder="說明" value="${it.desc||''}" oninput="updateSpot(${i},'desc',this.value)">
+      <button class="btn-del-spot" onclick="delSpot(${i})">✕</button>
+    `;
+    c.appendChild(row);
+  });
+}
+
+let editItems = [];
+function openEditModal(i) {
+  editingDay = i;
+  const d = days[i];
+  editItems = JSON.parse(JSON.stringify(d.items || []));
+  document.getElementById('edit-date').value = d.date || '';
+  document.getElementById('edit-title').value = d.title || '';
+  document.getElementById('edit-sub').value = d.sub || '';
+  renderSpotRows(editItems);
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function updateSpot(i, field, val) { if (editItems[i]) editItems[i][field] = val; }
+function delSpot(i) { editItems.splice(i, 1); renderSpotRows(editItems); }
+function addSpotRow() { editItems.push({time:'', name:'', desc:''}); renderSpotRows(editItems); }
+
+function saveDay() {
+  const i = editingDay;
+  days[i].date = document.getElementById('edit-date').value;
+  days[i].title = document.getElementById('edit-title').value;
+  days[i].sub = document.getElementById('edit-sub').value;
+  days[i].items = JSON.parse(JSON.stringify(editItems));
+  saveData();
+  render();
+  closeModal();
+  showToast('行程已儲存 ✓');
+}
+
+// TOAST
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+document.getElementById('modal-overlay').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// INIT
+loadData();
+</script>
+</body>
+</html>

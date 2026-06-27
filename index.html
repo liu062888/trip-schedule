@@ -176,7 +176,11 @@
   .field-input { width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: 9px 12px; font-family: inherit; font-size: 14px; color: var(--text); background: var(--bg); outline: none; transition: border-color 0.15s; }
   .field-input:focus { border-color: var(--accent-mid); }
   .spots-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px; }
-  .spot-row { display: grid; grid-template-columns: 60px 1fr 1fr auto; gap: 6px; align-items: center; }
+  .spot-row { display: grid; grid-template-columns: 20px 60px 1fr 1fr auto; gap: 6px; align-items: center; cursor: default; border-radius: 6px; transition: background 0.15s; }
+  .spot-row.drag-over-spot { background: var(--accent-light); outline: 2px dashed var(--accent-mid); }
+  .spot-row.dragging-spot { opacity: 0.4; }
+  .spot-drag-handle { color: var(--muted); font-size: 14px; cursor: grab; text-align: center; }
+  .spot-drag-handle:active { cursor: grabbing; }
   .spot-row input { border: 1px solid var(--border); border-radius: 6px; padding: 7px 8px; font-family: inherit; font-size: 12px; background: var(--bg); color: var(--text); width: 100%; outline: none; }
   .spot-row input:focus { border-color: var(--accent-mid); }
   .btn-del-spot { background: none; border: none; color: #c0392b; cursor: pointer; font-size: 16px; padding: 4px; border-radius: 4px; }
@@ -932,13 +936,31 @@ function openDayModal(i) {
   openModal('day-modal');
 }
 
+let spotDragSrc = null;
+
 function renderSpotRows(items) {
   const c = document.getElementById('edit-spots');
   c.innerHTML = '';
   items.forEach((it, i) => {
     const row = document.createElement('div');
     row.className = 'spot-row';
+    row.draggable = true;
+    row.dataset.spotIndex = i;
+    row.addEventListener('dragstart', (e) => { spotDragSrc = i; row.classList.add('dragging-spot'); e.dataTransfer.effectAllowed = 'move'; });
+    row.addEventListener('dragover',  (e) => { e.preventDefault(); row.classList.add('drag-over-spot'); });
+    row.addEventListener('dragleave', () => row.classList.remove('drag-over-spot'));
+    row.addEventListener('dragend',   () => { row.classList.remove('dragging-spot', 'drag-over-spot'); spotDragSrc = null; });
+    row.addEventListener('drop', (e) => {
+      e.preventDefault();
+      row.classList.remove('drag-over-spot');
+      const dest = parseInt(row.dataset.spotIndex);
+      if (spotDragSrc === null || spotDragSrc === dest) return;
+      const moved = editItems.splice(spotDragSrc, 1)[0];
+      editItems.splice(dest, 0, moved);
+      renderSpotRows(editItems);
+    });
     row.innerHTML = `
+      <span class="spot-drag-handle" title="拖曳排序">⠿</span>
       <input placeholder="時間" value="${it.time||''}" oninput="updateSpot(${i},'time',this.value)">
       <input placeholder="名稱" value="${it.name||''}" oninput="updateSpot(${i},'name',this.value)">
       <input placeholder="說明" value="${it.desc||''}" oninput="updateSpot(${i},'desc',this.value)">
